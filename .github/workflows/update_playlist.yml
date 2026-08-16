@@ -5,6 +5,9 @@ on:
     - cron: '0 0 * * *'   # Her gün gece yarısı çalışır (UTC)
   workflow_dispatch:      # Manuel çalıştırma imkanı
 
+permissions:
+  contents: write         # GITHUB_TOKEN'e içerik yazma izni verir
+
 jobs:
   build:
     runs-on: ubuntu-latest
