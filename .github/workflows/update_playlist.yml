@@ -1,0 +1,28 @@
+name: Update Playlist
+
+on:
+  schedule:
+    - cron: '0 0 * * *'   # Her gün gece yarısı çalışır (UTC)
+  workflow_dispatch:      # Manuel çalıştırma imkanı
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Run filter script
+        run: python filter_playlist.py
+
+      - name: Commit and push if changed
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add playlist.m3u
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update playlist" && git push)
